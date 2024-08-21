@@ -6,14 +6,19 @@ class TextValuesController extends GetxController{
   var inLineValue = 1.obs;
 
   valueController(int items){
-    if(items>30){
+    if(items<30){
+      itemsValue.value = items;
+    }else{
       TopSnackBar(message: "Only 30 Items Allowed",);
     }
   }
 
   inlineValueController(int value){
-    if(value>15){
+    if(value<15){
+      inLineValue.value = value;
+    }else{
       TopSnackBar(message: "Only 15 Items Allowed",);
+
     }
   }
 }

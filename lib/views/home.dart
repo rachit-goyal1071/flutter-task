@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
       final text = itemsInLineController.text;
       if (text.isNotEmpty){
         final items = int.tryParse(text) ?? 1;
-        textValuesController.valueController(items);
+        textValuesController.inlineValueController(items);
       }
     });
     return Scaffold(
@@ -59,24 +59,34 @@ class HomePage extends StatelessWidget {
                   label: 'Items in Line',
                   color: colorsList[dropDownController.colorIndex.value],
                   textEditingController: itemsInLineController,))),
-            Obx(()=>MainProgressIndicator(color: colorsList[dropDownController.colorIndex.value],)),
-        Obx(() {
-      return SizedBox(
-        width: double.infinity,
-        child: GradientProgressContainer(
-          value: progressController.progress.value,
-          gradient: LinearGradient(
-            colors: [Color.fromARGB(255, 67, 7, 255),Color.fromARGB(255, 40, 1, 82)], // Gradient colors
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          height: 10.0, // Adjust height as needed
-        ),
-      );
-    })
+            Obx(()=>
+            SizedBox(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: textValuesController.itemsValue.value,
+                  itemBuilder: (context,index){
+                        return MainProgressIndicator(color: colorsList[dropDownController.colorIndex.value],);
+                  }),
+            ))
           ],
         ),
       ),
     );
   }
 }
+
+//     Obx(() {
+//   return SizedBox(
+//     width: double.infinity,
+//     child: GradientProgressContainer(
+//       value: progressController.progress.value,
+//       gradient: LinearGradient(
+//         colors: [Color.fromARGB(255, 67, 7, 255),Color.fromARGB(255, 40, 1, 82)], // Gradient colors
+//         begin: Alignment.centerLeft,
+//         end: Alignment.centerRight,
+//       ),
+//       height: 10.0, // Adjust height as needed
+//     ),
+//   );
+// })
