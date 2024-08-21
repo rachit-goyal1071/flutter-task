@@ -66,9 +66,6 @@ class SlidingSpeedSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx((){
       int index = sliderController.sliderIndex.value.toInt();
-      double speed = sliderController.sliderIndex.value;
-      int durationMilliseconds = (30 / (speed + 1)).toInt();
-      progressController.setSpeed(durationMilliseconds.toDouble());
       return Slider(
       activeColor: color,
         value: sliderController.sliderIndex.value,
@@ -77,7 +74,7 @@ class SlidingSpeedSelector extends StatelessWidget {
         label: labelList[index],
         onChanged: (value){
           sliderController.changeSliderValue(value);
-          progressController.setSpeed((30 / (value + 1)).toDouble());
+          progressController.setSpeed(value);
         },
     );});
   }
@@ -154,12 +151,13 @@ class TopSnackBar extends StatelessWidget {
   }
 }
 
-class GradientProgressContainer extends StatelessWidget {
+
+class GradientProgressBar extends StatelessWidget {
   final double value; // Progress value from 0.0 to 1.0
   final Gradient gradient;
   final double height;
 
-  const GradientProgressContainer({
+  GradientProgressBar({
     Key? key,
     required this.value,
     required this.gradient,
@@ -172,23 +170,91 @@ class GradientProgressContainer extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
+        border: Border.all(width: 2, color: Colors.grey), // Border color
         borderRadius: BorderRadius.circular(4.0),
-        gradient: gradient,
+        color: Colors.grey[200], // Background color for the unfilled part
       ),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Container(
-          width: MediaQuery.of(context).size.width * value,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(4.0),
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            top: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.width * value,
+              height: height,
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(4.0),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 }
+
+
+class GradientProgressBars extends StatelessWidget {
+  final double progress; // Total progress (0.0 to 1.0)
+  final int segments; // Number of segments
+  final Gradient gradient; // Gradient to fill each segment
+  final double height;
+
+  const GradientProgressBars({
+    Key? key,
+    required this.progress,
+    required this.segments,
+    required this.gradient,
+    this.height = 30,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double segmentWidth = MediaQuery.of(context).size.width / segments;
+    double segmentProgress = progress * segments; // Total progress split into segments
+
+    return Container(
+      height: 20,
+      width: double.infinity,
+      child: Stack(
+        children: List.generate(segments, (index) {
+          double progressInSegment = segmentProgress - index;
+          if (progressInSegment < 0) progressInSegment = 0.0;
+          if (progressInSegment > 1) progressInSegment = 1.0;
+
+          return Positioned(
+            left: segmentWidth * index,
+            top: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(1.0),
+              child: Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    width: segmentWidth * progressInSegment,
+                    height: 16,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: Colors.grey), // Border color
+                      color: Colors.grey[200],
+                      gradient: gradient,
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
+                  SizedBox(width: 5,)
+                ],
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+
+
+
 
 
 // class TopSnackBar extends StatelessWidget {

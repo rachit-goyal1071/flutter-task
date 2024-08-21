@@ -1,40 +1,93 @@
-import 'package:get/get.dart';
+// import 'dart:async';
+// import 'package:get/get.dart';
+//
+// class ProgressController extends GetxController {
+//   var progress = 0.0.obs;
+//   Timer? _timer;
+//   var time = 30.obs;
+//
+//   @override
+//   void onInit() {
+//     super.onInit();
+//     _startAnimation(time.value);
+//   }
+//
+//   void setProgress(double value) {
+//     progress.value = value.clamp(0.0, 1.0);
+//   }
+//
+//   void setSpeed(double speed) {
+//     time.value = (30 / (speed + 1)).toInt();
+//     _startAnimation(time.value);
+//   }
+//
+//   void _startAnimation(int durationMilliseconds) {
+//     _timer?.cancel();
+//
+//     progress.value = 0.0;
+//
+//     _timer = Timer.periodic(Duration(milliseconds: durationMilliseconds), (timer) {
+//       if (progress.value >= 1.0) {
+//         progress.value = 0.0;
+//       } else {
+//         progress.value += 0.01;
+//       }
+//     });
+//   }
+//
+//   @override
+//   void onClose() {
+//     _timer?.cancel();
+//     super.onClose();
+//   }
+// }
+//
+
+
 import 'dart:async';
+import 'package:get/get.dart';
 
 class ProgressController extends GetxController {
-  var progress = 0.0.obs; // Observable for the progress value
-  var speed = 1.0.obs; // Speed control from the slider
-  late Timer _timer;
+  var progress = 0.0.obs;
+  Timer? _timer;
+  var time = 30.obs;
 
   @override
   void onInit() {
     super.onInit();
-    _startAnimation();
+    _startAnimation(time.value);
   }
 
-  void _startAnimation() {
-    _timer = Timer.periodic(Duration(milliseconds: 30), (timer) {
+  void setProgress(double value) {
+    progress.value = value.clamp(0.0, 1.0);
+  }
+
+  void setSpeed(double speed) {
+    time.value = (30 / (speed + 1)).toInt(); // Adjust speed
+    _restartAnimation(time.value);
+  }
+
+  void _startAnimation(int durationMilliseconds) {
+    _timer?.cancel(); // Cancel any existing timer
+
+    progress.value = 0.0; // Reset progress to 0.0
+
+    _timer = Timer.periodic(Duration(milliseconds: durationMilliseconds), (timer) {
       if (progress.value >= 1.0) {
-        progress.value = 0.0; // Reset progress
+        progress.value = 0.0; // Reset progress when it reaches 1.0
       } else {
-        progress.value += 0.01; // Update the progress value
+        progress.value += 0.01; // Increment progress
       }
     });
   }
 
-  void setSpeed(double newSpeed) {
-    speed.value = newSpeed;
-    _restartAnimation();
-  }
-
-  void _restartAnimation() {
-    _timer.cancel();
-    _startAnimation();
+  void _restartAnimation(int durationMilliseconds) {
+    _startAnimation(durationMilliseconds);
   }
 
   @override
   void onClose() {
-    _timer.cancel(); // Cancel the timer when the controller is disposed
+    _timer?.cancel(); // Cancel the timer when the controller is disposed
     super.onClose();
   }
 }
