@@ -205,6 +205,8 @@ class GradientProgressBars extends StatelessWidget {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: List.generate(numLines, (lineIndex) {
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 0.0),
@@ -228,7 +230,7 @@ class GradientProgressBars extends StatelessWidget {
                     border: Border.all(width: 2, color: Colors.black),
                     color: Colors.grey[200],
                     gradient: gradient,
-                    borderRadius: BorderRadius.circular(4.0),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
               );
