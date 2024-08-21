@@ -88,7 +88,8 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: GradientProgressBars(
                     progress: progressController.progress.value,
-                    segments: textValuesController.inLineValue.value,
+                    barsPerLine: textValuesController.inLineValue.value,
+                    totalBars: textValuesController.itemsValue.value,
                     gradient: LinearGradient(
                       colors: [greenGradient,blueGradient,redGradient,purpleGradient][dropDownController.colorIndex.value],
                       begin: Alignment.centerLeft,

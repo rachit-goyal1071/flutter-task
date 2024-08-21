@@ -195,59 +195,113 @@ class GradientProgressBar extends StatelessWidget {
 }
 
 
+// class GradientProgressBars extends StatelessWidget {
+//   final double progress; // Total progress (0.0 to 1.0)
+//   final int segments; // Number of segments
+//   final Gradient gradient; // Gradient to fill each segment
+//   final double height;
+//
+//   const GradientProgressBars({
+//     Key? key,
+//     required this.progress,
+//     required this.segments,
+//     required this.gradient,
+//     this.height = 30,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     double segmentWidth = MediaQuery.of(context).size.width / segments;
+//     double segmentProgress = progress * segments;
+//
+//     return Container(
+//       height: 20,
+//       width: double.infinity,
+//       child: Stack(
+//         children: List.generate(segments, (index) {
+//           double progressInSegment = segmentProgress - index;
+//           if (progressInSegment < 0) progressInSegment = 0.0;
+//           if (progressInSegment > 1) progressInSegment = 1.0;
+//
+//           return Positioned(
+//             left: segmentWidth * index,
+//             top: 0,
+//             child: Padding(
+//               padding: const EdgeInsets.all(1.0),
+//               child: Container(
+//                 margin: EdgeInsets.symmetric(horizontal: 5),
+//                 width: segmentWidth * progressInSegment,
+//                 height: 16,
+//                 decoration: BoxDecoration(
+//                   border: Border.all(width: 2, color: Colors.grey), // Border color
+//                   color: Colors.grey[200],
+//                   gradient: gradient,
+//                   borderRadius: BorderRadius.circular(4.0),
+//                 ),
+//               ),
+//             ),
+//           );
+//         }),
+//       ),
+//     );
+//   }
+// }
+
 class GradientProgressBars extends StatelessWidget {
   final double progress; // Total progress (0.0 to 1.0)
-  final int segments; // Number of segments
+  final int totalBars; // Total number of bars
+  final int barsPerLine; // Number of bars in a single line
   final Gradient gradient; // Gradient to fill each segment
   final double height;
 
   const GradientProgressBars({
     Key? key,
     required this.progress,
-    required this.segments,
+    required this.totalBars,
+    required this.barsPerLine,
     required this.gradient,
     this.height = 30,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double segmentWidth = MediaQuery.of(context).size.width / segments;
-    double segmentProgress = progress * segments; // Total progress split into segments
+    int numLines = (totalBars / barsPerLine).ceil();
+    double segmentWidth = MediaQuery.of(context).size.width / barsPerLine;
+    double segmentProgress = progress * totalBars;
 
-    return Container(
-      height: 20,
-      width: double.infinity,
-      child: Stack(
-        children: List.generate(segments, (index) {
-          double progressInSegment = segmentProgress - index;
-          if (progressInSegment < 0) progressInSegment = 0.0;
-          if (progressInSegment > 1) progressInSegment = 1.0;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(numLines, (lineIndex) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 2.0), // Space between lines
+          height: height,
+          width: double.infinity,
+          child: Row(
+            children: List.generate(barsPerLine, (barIndex) {
+              int currentIndex = lineIndex * barsPerLine + barIndex;
+              if (currentIndex >= totalBars) return SizedBox.shrink(); // Avoid extra bars
 
-          return Positioned(
-            left: segmentWidth * index,
-            top: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(1.0),
-              child: Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5),
-                    width: segmentWidth * progressInSegment,
-                    height: 16,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.grey), // Border color
-                      color: Colors.grey[200],
-                      gradient: gradient,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
+              double progressInSegment = segmentProgress - currentIndex;
+              if (progressInSegment < 0) progressInSegment = 0.0;
+              if (progressInSegment > 1) progressInSegment = 1.0;
+
+              return Padding(
+                padding: const EdgeInsets.all(1.0),
+                child: Container(
+                  width: segmentWidth * progressInSegment,
+                  height: height,
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 2, color: Colors.grey), // Border color
+                    color: Colors.grey[200], // Background color
+                    gradient: gradient,
+                    borderRadius: BorderRadius.circular(4.0),
                   ),
-                  SizedBox(width: 5,)
-                ],
-              ),
-            ),
-          );
-        }),
-      ),
+                ),
+              );
+            }),
+          ),
+        );
+      }),
     );
   }
 }
