@@ -95,15 +95,15 @@ class ValueTextField extends StatelessWidget {
         child: TextField(
           keyboardType: TextInputType.number,
           controller: textEditingController,
-          style: TextStyle(color: color),  // color will be provided
+          style: TextStyle(color: color),
           decoration: InputDecoration(
             labelText: label,
-            labelStyle: TextStyle(color: color),  // color will be provided
+            labelStyle: TextStyle(color: color),
             enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: color), // color will be provided
+                borderSide: BorderSide(color: color),
                 borderRadius: BorderRadius.circular(14)),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: color), // color will be provided
+                borderSide: BorderSide(color: color),
                 borderRadius: BorderRadius.circular(14)),
           ),
           cursorColor: Colors.red,
@@ -138,22 +138,9 @@ class MainProgressIndicator extends StatelessWidget {
   }
 }
 
-class TopSnackBar extends StatelessWidget {
-  String message;
-  TopSnackBar({super.key,required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return SnackBar(
-        content: Text(message),
-
-    );
-  }
-}
-
 
 class GradientProgressBar extends StatelessWidget {
-  final double value; // Progress value from 0.0 to 1.0
+  final double value;
   final Gradient gradient;
   final double height;
 
@@ -161,7 +148,7 @@ class GradientProgressBar extends StatelessWidget {
     Key? key,
     required this.value,
     required this.gradient,
-    this.height = 6.0, // Default height for the progress indicator
+    this.height = 6.0,
   }) : super(key: key);
 
   @override
@@ -170,9 +157,9 @@ class GradientProgressBar extends StatelessWidget {
       height: height,
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(width: 2, color: Colors.grey), // Border color
+        border: Border.all(width: 2, color: Colors.grey),
         borderRadius: BorderRadius.circular(4.0),
-        color: Colors.grey[200], // Background color for the unfilled part
+        color: Colors.grey[200],
       ),
       child: Stack(
         children: [
@@ -194,64 +181,11 @@ class GradientProgressBar extends StatelessWidget {
   }
 }
 
-
-// class GradientProgressBars extends StatelessWidget {
-//   final double progress; // Total progress (0.0 to 1.0)
-//   final int segments; // Number of segments
-//   final Gradient gradient; // Gradient to fill each segment
-//   final double height;
-//
-//   const GradientProgressBars({
-//     Key? key,
-//     required this.progress,
-//     required this.segments,
-//     required this.gradient,
-//     this.height = 30,
-//   }) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     double segmentWidth = MediaQuery.of(context).size.width / segments;
-//     double segmentProgress = progress * segments;
-//
-//     return Container(
-//       height: 20,
-//       width: double.infinity,
-//       child: Stack(
-//         children: List.generate(segments, (index) {
-//           double progressInSegment = segmentProgress - index;
-//           if (progressInSegment < 0) progressInSegment = 0.0;
-//           if (progressInSegment > 1) progressInSegment = 1.0;
-//
-//           return Positioned(
-//             left: segmentWidth * index,
-//             top: 0,
-//             child: Padding(
-//               padding: const EdgeInsets.all(1.0),
-//               child: Container(
-//                 margin: EdgeInsets.symmetric(horizontal: 5),
-//                 width: segmentWidth * progressInSegment,
-//                 height: 16,
-//                 decoration: BoxDecoration(
-//                   border: Border.all(width: 2, color: Colors.grey), // Border color
-//                   color: Colors.grey[200],
-//                   gradient: gradient,
-//                   borderRadius: BorderRadius.circular(4.0),
-//                 ),
-//               ),
-//             ),
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }
-
 class GradientProgressBars extends StatelessWidget {
-  final double progress; // Total progress (0.0 to 1.0)
-  final int totalBars; // Total number of bars
-  final int barsPerLine; // Number of bars in a single line
-  final Gradient gradient; // Gradient to fill each segment
+  final double progress;
+  final int totalBars;
+  final int barsPerLine;
+  final Gradient gradient;
   final double height;
 
   const GradientProgressBars({
@@ -260,26 +194,26 @@ class GradientProgressBars extends StatelessWidget {
     required this.totalBars,
     required this.barsPerLine,
     required this.gradient,
-    this.height = 30,
+    this.height = 50,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     int numLines = (totalBars / barsPerLine).ceil();
-    double segmentWidth = MediaQuery.of(context).size.width / barsPerLine;
+    double segmentWidth = (MediaQuery.of(context).size.width - (barsPerLine - 1) * 2) / barsPerLine;
     double segmentProgress = progress * totalBars;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: List.generate(numLines, (lineIndex) {
         return Container(
-          margin: const EdgeInsets.symmetric(vertical: 2.0), // Space between lines
-          height: height,
+          margin: const EdgeInsets.symmetric(vertical: 0.0),
+          height: 20,
           width: double.infinity,
           child: Row(
             children: List.generate(barsPerLine, (barIndex) {
               int currentIndex = lineIndex * barsPerLine + barIndex;
-              if (currentIndex >= totalBars) return SizedBox.shrink(); // Avoid extra bars
+              if (currentIndex >= totalBars) return const SizedBox.shrink();
 
               double progressInSegment = segmentProgress - currentIndex;
               if (progressInSegment < 0) progressInSegment = 0.0;
@@ -291,8 +225,8 @@ class GradientProgressBars extends StatelessWidget {
                   width: segmentWidth * progressInSegment,
                   height: height,
                   decoration: BoxDecoration(
-                    border: Border.all(width: 2, color: Colors.grey), // Border color
-                    color: Colors.grey[200], // Background color
+                    border: Border.all(width: 2, color: Colors.black),
+                    color: Colors.grey[200],
                     gradient: gradient,
                     borderRadius: BorderRadius.circular(4.0),
                   ),
@@ -306,63 +240,49 @@ class GradientProgressBars extends StatelessWidget {
   }
 }
 
+class TopSnackBar {
+  static void show(BuildContext context, String message) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50.0,
+        left: MediaQuery.of(context).size.width * 0.1,
+        width: MediaQuery.of(context).size.width * 0.8,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Text(
+              message,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 16.0,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
 
+    overlay?.insert(overlayEntry);
 
+    Future.delayed(Duration(seconds: 2), () {
+      overlayEntry.remove();
+    });
+  }
+}
 
-
-
-// class TopSnackBar extends StatelessWidget {
-//   final String message;
-//
-//   TopSnackBar({super.key, required this.message});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       child: Material(
-//         color: Colors.transparent,
-//         child: Container(
-//           margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-//           padding: const EdgeInsets.all(16.0),
-//           decoration: BoxDecoration(
-//             color: Colors.blue, // Customize the background color
-//             borderRadius: BorderRadius.circular(8.0),
-//             boxShadow: [
-//               BoxShadow(
-//                 color: Colors.black26,
-//                 blurRadius: 10.0,
-//                 offset: Offset(0, 4),
-//               ),
-//             ],
-//           ),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Expanded(
-//                 child: Text(
-//                   message,
-//                   style: TextStyle(color: Colors.black),
-//                 ),
-//               ),
-//               IconButton(
-//                 icon: Icon(Icons.close, color: Colors.white),
-//                 onPressed: () {
-//                   _dismissSnackBar(context);
-//                 },
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   void _dismissSnackBar(BuildContext context) {
-//     Overlay.of(context)?.setState(() {
-//       Navigator.of(context).pop();
-//     });
-//   }
-// }
 
 
 

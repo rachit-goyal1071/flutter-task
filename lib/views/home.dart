@@ -25,14 +25,14 @@ class HomePage extends StatelessWidget {
       final text = itemsController.text;
       if (text.isNotEmpty) {
         final items = int.tryParse(text) ?? 1;
-        textValuesController.valueController(items);
+        textValuesController.valueController(items,context);
       }
     });
     itemsInLineController.addListener((){
       final text = itemsInLineController.text;
       if (text.isNotEmpty){
         final items = int.tryParse(text) ?? 1;
-        textValuesController.inlineValueController(items);
+        textValuesController.inlineValueController(items,context);
       }
     });
     return Scaffold(
@@ -60,29 +60,6 @@ class HomePage extends StatelessWidget {
                     label: 'Items in Line',
                     color: colorsList[dropDownController.colorIndex.value],
                     textEditingController: itemsInLineController,))),
-              // Obx(()=> SizedBox(
-              //   child: ListView.builder(
-              //     scrollDirection: Axis.vertical,
-              //     shrinkWrap: true,
-              //     itemCount: textValuesController.itemsValue.value,
-              //       itemBuilder: (context,index){
-              //             return MainProgressIndicator(color: colorsList[dropDownController.colorIndex.value],);
-              //       }),
-              // )),
-              // Obx(() {
-              //   return SizedBox(
-              //     width: double.infinity,
-              //     child: GradientProgressBar(
-              //       value: progressController.progress.value,
-              //       gradient: LinearGradient(
-              //         colors: [greenGradient,blueGradient,redGradient,purpleGradient][dropDownController.colorIndex.value],
-              //         begin: Alignment.centerLeft,
-              //         end: Alignment.centerRight,
-              //       ),
-              //       height: 10.0, // Adjust height as needed
-              //     ),
-              //   );
-              // }),
               Obx((){
                 return Padding(
                   padding: const EdgeInsets.all(8.0),

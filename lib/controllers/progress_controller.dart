@@ -41,7 +41,7 @@ class ProgressController extends GetxController {
 
   @override
   void onClose() {
-    _timer?.cancel(); // Cancel the timer when the controller is disposed
+    _timer?.cancel();
     super.onClose();
   }
 }
