@@ -1,0 +1,26 @@
+{
+  "name": "flutter_task_app",
+  "version": "1.0.0",
+  "description": "tese-app",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm ci && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rachit-goyal1071/flutter-task.git"
+  },
+  "keywords": [
+    "testapp"
+  ],
+  "author": "Rachit Goyal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rachit-goyal1071/flutter-task/issues"
+  },
+  "homepage": "https://github.com/rachit-goyal1071/flutter-task#readme"
+}
